@@ -7,12 +7,13 @@
 // @match         https://www.torn.com/*
 // @grant         GM_xmlhttpRequest
 // @grant         GM_addStyle
-// @connect       thatastronautguy.space
 // @connect       api.torn.com
+// @connect       discord.com
 // @updateURL     https://raw.githubusercontent.com/ThatAstronautGuy/pt-merc/main/userscript.js
 // @downloadURL   https://raw.githubusercontent.com/ThatAstronautGuy/pt-merc/main/userscript.js
 // ==/UserScript==
 
+//https://www.torn.com/preferences.php#tab=api?step=addNewKey&title=ptmerc&user=basic,battlestats,profile
 let apiKey = window.localStorage.getItem('torn-pt-api-key') || null;
 
 (function() {
@@ -114,6 +115,10 @@ let apiKey = window.localStorage.getItem('torn-pt-api-key') || null;
     }
   }
 
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   function callForHosp(e){
     e.preventDefault;
     let confirmAction = confirm("Are you sure you want to request a hosp at a cost of 4m?");
@@ -126,14 +131,26 @@ let apiKey = window.localStorage.getItem('torn-pt-api-key') || null;
         url: 'https://api.torn.com/user/?selections=profile,battlestats&key=' + apiKey,
         onload: (r) => {
           const obj = JSON.parse(r.responseText);
-            var postData = {PlayerID: obj.player_id, PlayerName: obj.name, Strength: obj.strength, Dexterity: obj.dexterity, Defense: obj.defense, Speed: obj.speed, FactionID: obj.faction.faction_id, FactionName: obj.faction.faction_name, Revivable: obj.revivable, Status: obj.status.description};
-            alert(JSON.stringify(postData));
+            var total = obj.strength + obj.dexterity + obj.speed + obj.defense;
+            var postData = {
+                content: "Looking for merc hit <@&996201281838387200>",
+                embeds: [{
+                    title: obj.name + " [" + obj.player_id + "]",
+                    description: obj.faction.faction_name + " [" + obj.faction.faction_id + "]\nStatus: " + obj.status.description + "\nStrength: " + numberWithCommas(obj.strength) + "\nDexterity: " + numberWithCommas(obj.dexterity) + "\nDefense: " + numberWithCommas(obj.defense) + "\nSpeed: " + numberWithCommas(obj.speed) + "\nTotal: " + numberWithCommas(total) + "\n[Attack](https://www.torn.com/loader.php?sid=attack&user2ID=" + obj.player_id + ")",
+                    color: 16734296
+                }]
+            };
+
+            //alert(JSON.stringify(postData));
             GM_xmlhttpRequest ( {
               method:     'POST',
-              url:        'https://www.thatastronautguy.space/api/gethosp',
+              url:        'https://discord.com/api/webhooks/996194217892270080/a1vFv4XQEWWShINJFHt1oMLS-3DVoBiHnZABmW5bBahOl8JmANBnyOE9rvJTGmKlxcNt',
               data:       JSON.stringify(postData),
+              headers: {
+                  "Content-Type": "application/json"
+              },
               onload:     function (responseDetails) {
-                  alert(responseDetails.responseText);
+                  //alert(responseDetails.responseText);
               }
           });
         }
