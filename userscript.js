@@ -10,8 +10,8 @@
 // @connect       api.torn.com
 // @connect       discord.com
 // @connect       ptmerc.xyz
-// @updateURL     https://raw.githubusercontent.com/ThatAstronautGuy/pt-merc/main/userscript.js
-// @downloadURL   https://raw.githubusercontent.com/ThatAstronautGuy/pt-merc/main/userscript.js
+// @updateURL     https://raw.githubusercontent.com/PT-Group-Git/pt-merc/main/userscript.js
+// @downloadURL   https://raw.githubusercontent.com/PT-Group-Git/pt-merc/main/userscript.js
 // ==/UserScript==
 
 //https://www.torn.com/preferences.php#tab=api?step=addNewKey&title=ptmerc&user=basic,battlestats,profile    <--- use link to generate special API Key just for this script.
