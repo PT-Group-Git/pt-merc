@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          PT Group Merc Hit Request
 // @namespace     http://tampermonkey.net/
-// @version       0.1
+// @version       1.2
 // @author        ThtAstronautGuy [1977683]
 // @description   Send merc request to PT Group
 // @match         https://www.torn.com/*
@@ -9,11 +9,10 @@
 // @grant         GM_addStyle
 // @connect       api.torn.com
 // @connect       discord.com
-// @updateURL     https://raw.githubusercontent.com/ThatAstronautGuy/pt-merc/main/userscript.js
-// @downloadURL   https://raw.githubusercontent.com/ThatAstronautGuy/pt-merc/main/userscript.js
+// @connect       ptmerc.xyz
 // ==/UserScript==
 
-//https://www.torn.com/preferences.php#tab=api?step=addNewKey&title=ptmerc&user=basic,battlestats,profile
+//https://www.torn.com/preferences.php#tab=api?step=addNewKey&title=ptmerc&user=basic,battlestats,profile    <--- use link to generate special API Key just for this script.
 let apiKey = window.localStorage.getItem('torn-pt-api-key') || null;
 
 (function() {
@@ -132,25 +131,68 @@ let apiKey = window.localStorage.getItem('torn-pt-api-key') || null;
         onload: (r) => {
           const obj = JSON.parse(r.responseText);
             var total = obj.strength + obj.dexterity + obj.speed + obj.defense;
-            var postData = {
-                content: "Looking for merc hit <@&996201281838387200>",
-                embeds: [{
-                    title: obj.name + " [" + obj.player_id + "]",
-                    description: obj.faction.faction_name + " [" + obj.faction.faction_id + "]\nStatus: " + obj.status.description + "\nStrength: " + numberWithCommas(obj.strength) + "\nDexterity: " + numberWithCommas(obj.dexterity) + "\nDefense: " + numberWithCommas(obj.defense) + "\nSpeed: " + numberWithCommas(obj.speed) + "\nTotal: " + numberWithCommas(total) + "\n[Attack](https://www.torn.com/loader.php?sid=attack&user2ID=" + obj.player_id + ")",
-                    color: 16734296
-                }]
-            };
+         var postData = {
+    content: "Looking for merc hit <@&946417833435361320>",
+    embeds: [{
+        title: obj.name + " [" + obj.player_id + "]",
+        url: "https://www.torn.com/profiles.php?XID=" + obj.player_id,
+        color: 16734296,
+        fields: [
+            {
+                name: "Faction",
+                value: obj.faction.faction_name + " [" + obj.faction.faction_id + "]",
+                inline: true
+            },
+            {
+                name: "Status",
+                value: obj.status.description,
+                inline: true
+            },
+            {
+                name: "Strength",
+                value: numberWithCommas(obj.strength),
+                inline: true
+            },
+            {
+                name: "Dexterity",
+                value: numberWithCommas(obj.dexterity),
+                inline: true
+            },
+            {
+                name: "Defense",
+                value: numberWithCommas(obj.defense),
+                inline: true
+            },
+            {
+                name: "Speed",
+                value: numberWithCommas(obj.speed),
+                inline: true
+            },
+            {
+                name: "Total",
+                value: numberWithCommas(total),
+                inline: true
+            },
+            {
+                name: "Attack",
+                value: "[Click Here](https://www.torn.com/loader.php?sid=attack&user2ID=" + obj.player_id + ")",
+                inline: true
+            }
+        ]
+    }]
+};
+
 
             //alert(JSON.stringify(postData));
-            GM_xmlhttpRequest ( {
-              method:     'POST',
-              url:        'https://discord.com/api/webhooks/996194217892270080/a1vFv4XQEWWShINJFHt1oMLS-3DVoBiHnZABmW5bBahOl8JmANBnyOE9rvJTGmKlxcNt',
-              data:       JSON.stringify(postData),
-              headers: {
-                  "Content-Type": "application/json"
-              },
-              onload:     function (responseDetails) {
-                  //alert(responseDetails.responseText);
+           GM_xmlhttpRequest({
+    method: 'POST',
+    url: 'https://ptmerc.xyz/mercscript.php',
+    data: JSON.stringify(postData),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    onload: function(responseDetails) {
+      //alert(responseDetails.responseText);
               }
           });
         }
