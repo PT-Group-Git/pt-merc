@@ -2,7 +2,7 @@
 // @name          PT Group Merc Hit Request
 // @namespace     http://tampermonkey.net/
 // @version       1.2
-// @author        ThtAstronautGuy [1977683]
+// @author        ThtAstronautGuy [1977683], Oran [1778676]
 // @description   Send merc request to PT Group
 // @match         https://www.torn.com/*
 // @grant         GM_xmlhttpRequest
@@ -10,6 +10,8 @@
 // @connect       api.torn.com
 // @connect       discord.com
 // @connect       ptmerc.xyz
+// @updateURL     https://raw.githubusercontent.com/ThatAstronautGuy/pt-merc/main/userscript.js
+// @downloadURL   https://raw.githubusercontent.com/ThatAstronautGuy/pt-merc/main/userscript.js
 // ==/UserScript==
 
 //https://www.torn.com/preferences.php#tab=api?step=addNewKey&title=ptmerc&user=basic,battlestats,profile    <--- use link to generate special API Key just for this script.
